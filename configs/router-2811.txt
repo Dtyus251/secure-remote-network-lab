@@ -1,0 +1,106 @@
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname 2811_R
+!
+! Credentials removed for security
+enable secret <removed>
+!
+no aaa new-model
+!
+resource policy
+!
+ip subnet-zero
+ip cef
+no ip dhcp use vrf connected
+!
+! -------------------------
+! DHCP Configuration
+! -------------------------
+ip dhcp pool VLAN10
+ network 10.10.10.0 255.255.255.0
+ default-router 10.10.10.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool VLAN20
+ network 10.10.20.0 255.255.255.0
+ default-router 10.10.20.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool VLAN30
+ network 10.10.30.0 255.255.255.0
+ default-router 10.10.30.1
+ dns-server 8.8.8.8
+!
+! -------------------------
+! Local User Account
+! -------------------------
+username admin privilege 15 secret <removed>
+!
+! -------------------------
+! WAN Interface (Internet)
+! -------------------------
+interface FastEthernet0/0
+ ip address dhcp
+ ip nat outside
+ duplex auto
+ speed auto
+!
+! -------------------------
+! Trunk Interface to Switch
+! -------------------------
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1.10
+ encapsulation dot1Q 10
+ ip address 10.10.10.1 255.255.255.0
+ ip nat inside
+!
+interface FastEthernet0/1.20
+ encapsulation dot1Q 20
+ ip address 10.10.20.1 255.255.255.0
+ ip nat inside
+!
+interface FastEthernet0/1.30
+ encapsulation dot1Q 30
+ ip address 10.10.30.1 255.255.255.0
+ ip nat inside
+!
+interface Serial0/0/0
+ shutdown
+!
+! -------------------------
+! Routing & NAT
+! -------------------------
+ip classless
+ip route 0.0.0.0 0.0.0.0 192.168.1.254
+!
+ip nat inside source list 1 interface FastEthernet0/0 overload
+!
+access-list 1 permit 10.10.10.0 0.0.0.255
+access-list 1 permit 10.10.20.0 0.0.0.255
+access-list 1 permit 10.10.30.0 0.0.0.255
+!
+no ip http server
+!
+! -------------------------
+! Management Access
+! -------------------------
+line con 0
+ login local
+!
+line vty 0 4
+ login local
+ transport input telnet
+!
+scheduler allocate 20000 1000
+!
+end
+
+Note: All credentials, password hashes, and sensitive cryptographic material have been removed from configuration files prior to publication
