@@ -186,7 +186,7 @@ Production-style infrastructure workflow
 
 🛡️ Security Notice
 
-All credentials, authentication tokens, and cryptographic material have been removed from repository files.
+All credentials, authentication tokens, and cryptographic material have been removed from repository files
 
 📌 Author
 
