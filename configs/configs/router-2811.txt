@@ -103,4 +103,4 @@ scheduler allocate 20000 1000
 !
 end
 
-Note: All credentials, password hashes, and sensitive cryptographic material have been removed from configuration files prior to publication.
+Note: All credentials, password hashes, and sensitive cryptographic material have been removed from configuration files prior to publication
